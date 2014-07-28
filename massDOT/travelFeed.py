@@ -13,17 +13,13 @@ Creates a new directory, titled by date, to store each day's data.
 
 request = urllib2.Request('http://www.massdot.state.ma.us/feeds/traveltimes/RTTM_feed.aspx')
 data = urllib2.urlopen(request).read()
-
 root = ET.fromstring(data)
+
 lastUpdated = root[0].find('LastUpdated').text
 currentDay = lastUpdated[:-13]
 path = os.getcwd() +  '/data/'
 
-
-if currentDay in os.listdir(path):
-	os.chdir(path + currentDay)
-	open(lastUpdated+".xml", 'w').write(data)
-else:
+if currentDay not in os.listdir(path):
 	os.mkdir(path + currentDay)
-	os.chdir(path + currentDay)
-	open(lastUpdated+".xml", 'w').write(data)
+os.chdir(path + currentDay)
+open(lastUpdated+".xml", 'w').write(data)
