@@ -2,21 +2,28 @@ import urllib2
 import xml.etree.cElementTree as ET
 import os
 
+"""
+Pulls the xml file for Travel Times from massDOT's website
+and writes it to a file, titled by it's timestamp.
+
+Creates a new directory, titled by date, to store each day's data.
+
+** currently pulling Last-Modified for timestamp from XML data - not response header 
+"""
+
 request = urllib2.Request('http://www.massdot.state.ma.us/feeds/traveltimes/RTTM_feed.aspx')
 data = urllib2.urlopen(request).read()
 
 root = ET.fromstring(data)
 lastUpdated = root[0].find('LastUpdated').text
 currentDay = lastUpdated[:-13]
-path = '/Users/loganbernard/Dropbox/MOC/massDOT/data/' + currentDay
+path = os.getcwd() +  '/data/'
 
-# test if there is a dir for the current day
-if currentDay in os.listdir(os.getcwd()+'/data'):
-	os.chdir(path)
+
+if currentDay in os.listdir(path):
+	os.chdir(path + currentDay)
 	open(lastUpdated+".xml", 'w').write(data)
-
-# if not, create that directory (with name as month-day-year), and write inside it
 else:
-	os.mkdir(path)
-	os.chdir(path)
+	os.mkdir(path + currentDay)
+	os.chdir(path + currentDay)
 	open(lastUpdated+".xml", 'w').write(data)
