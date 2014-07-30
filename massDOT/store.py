@@ -1,6 +1,5 @@
-import urllib2
+import urllib2, os, time, logging, datetime
 import xml.etree.cElementTree as ET
-import os, time
 
 """
 Pulls the xml file from massDOT's website for the specified data feed, 'url',
@@ -16,20 +15,30 @@ inside the current working directory.
 """
 def feed(url, feedname):
 
+	start = time.time()
+
 	request = urllib2.Request(url)
 	data = urllib2.urlopen(request).read()
 	root = ET.fromstring(data)
 	lastUpdated = root[0].find('LastUpdated').text
 	currentDay = lastUpdated[:-13]
 
+	resTime = (time.time() - start)
+
 	path = os.getcwd()
 	if 'data' not in os.listdir(path):
-		os.mkdir(path + '/data/')
-	if feedname not in os.listdir(path + '/data/'):
-		os.mkdir(path + '/data/' + feedname)
-	if currentDay not in os.listdir(path + '/data/' + feedname):
-		os.mkdir(path + '/data/' + feedname + '/' + currentDay)
+		os.mkdir(path+'/data/')
+	if feedname not in os.listdir(path+'/data/'):
+		os.mkdir(path+'/data/'+feedname)
+	if currentDay not in os.listdir(path+'/data/'+feedname):
+		os.mkdir(path+'/data/'+feedname+'/'+currentDay)
 
-	os.chdir(path + '/data/' + feedname + '/' + currentDay)
-	open(lastUpdated + ".xml", 'w').write(data)
+	os.chdir(path+'/data/'+feedname+'/'+currentDay)
+	open(lastUpdated+".xml",'w').write(data)
 
+	writeTime = (time.time()-start-resTime) 
+
+	logging.basicConfig(filename=path+'/data/'+feedname+'/'+feedname+'.log',level=logging.INFO)
+	logging.info('Date/Time: '+lastUpdated)
+	logging.info('Response Time: '+`resTime`+' Write Time: '+`writeTime`)
+	logging.info('=========')
