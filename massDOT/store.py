@@ -8,7 +8,7 @@ Logging information specifying server response and file writing times
 is written to 'feedData.log' inside of the 'data' directory.
 """
 
-import urllib2, os, time, logging, datetime, ConfigParser
+import urllib2, os, time, logging, ConfigParser
 
 def writeFeed(url, feedname):
 	"""
@@ -30,9 +30,8 @@ def writeFeed(url, feedname):
 	
 	resTime = (time.time()-start)
 
-	date = datetime.datetime.utcnow()
-	currentDay = ("%s-%s-%s" % (date.year, date.month, date.day))
-	lastUpdated = (currentDay + " %s:%s:%s UTC" % (date.hour, date.minute, date.second))
+	currentDay = time.strftime("%b-%d-%Y")
+	lastUpdated = (currentDay + time.strftime("_%H:%M:%S_%Z"))
 
 	path = os.getcwd()
 	if 'data' not in os.listdir(path):
@@ -41,14 +40,12 @@ def writeFeed(url, feedname):
 		os.mkdir(path+'/data/'+feedname)
 	if currentDay not in os.listdir(path+'/data/'+feedname):
 		os.mkdir(path+'/data/'+feedname+'/'+currentDay)
-
-	os.chdir(path+'/data/'+feedname+'/'+currentDay)
-	open(lastUpdated+".xml",'w').write(data)
-	os.chdir(path)
+	open(path+'/data/'+feedname+'/'+currentDay+'/'+lastUpdated+".xml",'w').write(data)
 
 	writeTime = (time.time()-start-resTime) 
 
-	logging.basicConfig(filename=path+'/data/feedData.log',level=logging.INFO)
+	if 'feedData.log' not in os.listdir(path+'/data/'):
+		logging.basicConfig(filename=path+'/data/feedData.log',level=logging.INFO)
 	logging.info('Data Feed: '+feedname+' Date/Time: '+lastUpdated)
 	logging.info('Response Time: '+`resTime`+' Write Time: '+`writeTime`)
 	logging.info('=========')
@@ -59,4 +56,4 @@ config.read('feeds.ini')
 while True:
 	for feed in config.sections():
 		writeFeed(config.get(feed, 'url'), config.get(feed, 'name'))
-		time.sleep(1)
+		time.sleep(30)
