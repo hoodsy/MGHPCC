@@ -56,4 +56,4 @@ config.read('feeds.ini')
 while True:
 	for feed in config.sections():
 		writeFeed(config.get(feed, 'url'), config.get(feed, 'name'))
-		time.sleep(30)
+	time.sleep(30)
