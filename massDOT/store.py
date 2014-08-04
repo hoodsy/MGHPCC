@@ -32,20 +32,14 @@ def writeFeed(url, feedname):
 
 	currentDay = time.strftime("%b-%d-%Y")
 	lastUpdated = (currentDay + time.strftime("_%H:%M:%S_%Z"))
-
-	path = os.getcwd()
-	if 'data' not in os.listdir(path):
-		os.mkdir(path+'/data/')
-	if feedname not in os.listdir(path+'/data/'):
-		os.mkdir(path+'/data/'+feedname)
-	if currentDay not in os.listdir(path+'/data/'+feedname):
-		os.mkdir(path+'/data/'+feedname+'/'+currentDay)
-	open(path+'/data/'+feedname+'/'+currentDay+'/'+lastUpdated+".xml",'w').write(data)
+	path = os.getcwd()+'/data/'+feedname+'/'+currentDay
+	if not os.path.exists(path):
+  		os.makedirs(path)
+	open(path+'/'+lastUpdated+".xml",'w').write(data)
 
 	writeTime = (time.time()-start-resTime) 
 
-	if 'feedData.log' not in os.listdir(path+'/data/'):
-		logging.basicConfig(filename=path+'/data/feedData.log',level=logging.INFO)
+	logging.basicConfig(filename=os.getcwd()+'/data/feedData.log',level=logging.INFO)
 	logging.info('Data Feed: '+feedname+' Date/Time: '+lastUpdated)
 	logging.info('Response Time: '+`resTime`+' Write Time: '+`writeTime`)
 	logging.info('=========')
@@ -53,7 +47,5 @@ def writeFeed(url, feedname):
 
 config = ConfigParser.ConfigParser()
 config.read('feeds.ini')
-while True:
-	for feed in config.sections():
-		writeFeed(config.get(feed, 'url'), config.get(feed, 'name'))
-	time.sleep(30)
+for feed in config.sections():
+	writeFeed(config.get(feed, 'url'), config.get(feed, 'name'))
