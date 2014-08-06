@@ -2,8 +2,6 @@
 Stores MassDOT data feeds specified in 'feeds.ini'
 into a directory 'data' in the current working directory.
 
-Runs until user interrupt.
-
 Logging information specifying server response and file writing times
 is written to 'feedData.log' inside of the 'data' directory.
 """
@@ -48,4 +46,4 @@ def writeFeed(url, feedname):
 config = ConfigParser.ConfigParser()
 config.read('feeds.ini')
 for feed in config.sections():
-	writeFeed(config.get(feed, 'url'), config.get(feed, 'name'))
+	writeFeed(config.get(feed, 'url'), feed)
