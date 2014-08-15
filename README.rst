@@ -11,7 +11,8 @@ on servers at the MGHPCC.
 Current Feeds
 -------------
 
-**In Progress**
+**In Progress on MGHPCC**
 
-- Travel Times: http://www.massdot.state.ma.us/feeds/traveltimes/RTTM_feed.aspx
+All of the data feeds being collected, and their url locations, are listed
+in "feeds.ini".
 
