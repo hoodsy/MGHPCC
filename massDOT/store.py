@@ -12,15 +12,16 @@ import urllib2, os, time, logging, ConfigParser
 import ssl
 from functools import wraps
 def sslwrap(func):
-"""
-Work around for SSL issues when accessing massPort
-data feeds via https.
-"""
-    @wraps(func)
-    def bar(*args, **kw):
-        kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-        return func(*args, **kw)
-    return bar
+	"""
+	Work around for MassDOT server not accepting newer versions 
+	of TLS - specifies v1. Necessary for massPort data feeds.
+	"""
+
+	@wraps(func)
+	def bar(*args, **kw):
+			kw['ssl_version'] = ssl.PROTOCOL_TLSv1
+			return func(*args, **kw)
+	return bar
 
 ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 
@@ -54,12 +55,12 @@ def writeFeed(url, feedname):
 
 	writeTime = (time.time()-start-resTime) 
 
-	logging.basicConfig(filename=os.getcwd()+'/data/feedData.log',level=logging.INFO)
 	logging.info('Data Feed: '+feedname+' Date/Time: '+lastUpdated)
 	logging.info('Response Time: '+`resTime`+' Write Time: '+`writeTime`)
 	logging.info('=========')
 
-
+os.mkdir(os.getcwd()+'/data')
+logging.basicConfig(filename=os.getcwd()+'/data/feedData.log',level=logging.INFO)
 config = ConfigParser.ConfigParser()
 config.read('feeds.ini')
 for feed in config.sections():
