@@ -25,10 +25,11 @@ Accessing Data on MGHPCC
 
 The data feeds are collected on **opendata.mghpcc.org** and 
 can be accessed via ssh.
-	- **user**: massdot
-	- **hostname**: opendata.mghpcc.org
-	- **ssh key**: id_rsa_massdot
-		- file and passphrase located on MOC private repo
+
+- **user**: massdot
+- **hostname**: opendata.mghpcc.org
+- **ssh key**: id_rsa_massdot
+	- file and passphrase located on MOC private repo
 
 **example**: ``ssh -i ~/.ssh/id_rsa_massdot massdot@opendata.mghpcc.org``
 
