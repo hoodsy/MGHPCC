@@ -8,13 +8,14 @@ is written to 'feedData.log' inside of the 'data' directory.
 
 import urllib2, os, time, logging, ConfigParser
 
+
+import ssl
+from functools import wraps
+def sslwrap(func):
 """
 Work around for SSL issues when accessing massPort
 data feeds via https.
 """
-import ssl
-from functools import wraps
-def sslwrap(func):
     @wraps(func)
     def bar(*args, **kw):
         kw['ssl_version'] = ssl.PROTOCOL_TLSv1
