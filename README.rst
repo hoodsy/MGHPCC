@@ -16,6 +16,8 @@ Current Feeds
 All of the data feeds being collected and their url locations are listed
 in **feeds.ini**.
 
+There is a crontab set to run **store.py** once per minute, creating and saving a new version of each feed.
+
 Currently, all General Transit Feed Specification (**GTFS**) require their schema 
 to be loaded manually.  The only feed this currently applies to is 
 **vehicleLocations**, via the **MBTA_GTFS.zip** file.
@@ -25,10 +27,11 @@ Accessing Data on MGHPCC
 
 The data feeds are collected on **opendata.mghpcc.org** and 
 can be accessed via ssh.
-	- **user**: massdot
-	- **hostname**: opendata.mghpcc.org
-	- **ssh key**: id_rsa_massdot
-		- file and passphrase located on MOC private repo
+
+- **user**: massdot
+- **hostname**: opendata.mghpcc.org
+- **ssh key**: id_rsa_massdot
+	- file and passphrase located on MOC private repo
 
 **example**: ``ssh -i ~/.ssh/id_rsa_massdot massdot@opendata.mghpcc.org``
 
