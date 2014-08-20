@@ -59,7 +59,8 @@ def writeFeed(url, feedname):
 	logging.info('Response Time: '+`resTime`+' Write Time: '+`writeTime`)
 	logging.info('=========')
 
-os.mkdir(os.getcwd()+'/data')
+if 'data' not in os.listdir(os.getcwd()):
+	os.mkdir(os.getcwd()+'/data')
 logging.basicConfig(filename=os.getcwd()+'/data/feedData.log',level=logging.INFO)
 config = ConfigParser.ConfigParser()
 config.read('feeds.ini')
